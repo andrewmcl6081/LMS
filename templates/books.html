@@ -33,7 +33,10 @@
         <button type="submit" id="checkoutBtn">Checkout</button>
     </form> 
    
-    <!-- JS alert if card no is empty entered when checking out -->
+    <br>
+    <a href="{{ url_for('borrower') }}"><button>Not a member?</button></a>
+
+    <!-- JS alert if card_no is empty entered when checking out -->
     <script>
         document.getElementById('checkoutBtn').addEventListener('click', function() {
 

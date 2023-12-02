@@ -100,3 +100,17 @@ FROM Book_Loans BL
 JOIN Borrower BR ON BL.card_no=BR.card_no
 JOIN Book B ON B.book_id=BL.book_id
 JOIN Library_Branch LB on LB.branch_id=BL.branch_id;
+
+CREATE TRIGGER reduce_copies_trigger
+AFTER INSERT ON Book_Loans
+FOR EACH ROW
+BEGIN
+    UPDATE Book_Copies
+    SET no_of_copies = no_of_copies - 1
+    WHERE book_id=NEW.book_id AND branch_id=NEW.branch_id;
+END;
+
+CREATE VIEW User_View AS
+SELECT B.book_id, BC.branch_id, B.book_publisher, B.title, BC.no_of_copies
+FROM Book B
+JOIN Book_Copies BC ON B.book_id=BC.book_id;
