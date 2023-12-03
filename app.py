@@ -84,11 +84,11 @@ def new_borrower():
         cursor.execute(select_query, (fullname, address, phone))
         data = cursor.fetchall()
         
-        # At this point we have inserted a new borrower and obtained their card_no
-        # ToDo: return the card_no to the frontend that the variable data contains
-        
         cursor.close()
         sqliteConnection.close()
+        
+        # At this point we have inserted a new borrower and obtained their card_no
+        # ToDo: return the card_no to the frontend that the variable data contains
     except Exception as e:
         print('Error: ', e)
         
