@@ -87,8 +87,12 @@ def new_borrower():
         cursor.close()
         sqliteConnection.close()
         
+        new_card_no = data[0][0]
+        
         # At this point we have inserted a new borrower and obtained their card_no
-        # ToDo: return the card_no to the frontend that the variable data contains
+        # ToDo: return the new_card_no to the frontend
+        
+        return render_template('borrower.html', new_card_no=new_card_no)
     except Exception as e:
         print('Error: ', e)
         
