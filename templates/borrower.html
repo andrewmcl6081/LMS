@@ -14,6 +14,12 @@
         <label for="phone">Phone: </label><input type="text" id="phone" name="phone"><br><br>
         <button type="submit">Submit</button>
     </form>
+
+    <br>
+    {% if new_card_no %}
+        <h2>Your new card number</h2>
+        <p>{{ new_card_no }}</p>
+    {% endif %}
     
 </body>
 </html>
