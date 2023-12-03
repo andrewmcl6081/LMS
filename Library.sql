@@ -7,7 +7,7 @@ CREATE TABLE Publisher (
 
 DROP TABLE IF EXISTS Library_Branch;
 CREATE TABLE Library_Branch (
-    branch_id       INT PRIMARY KEY,
+    branch_id       INTEGER PRIMARY KEY AUTOINCREMENT,
     branch_name     VARCHAR(15) NOT NULL,
     branch_address  VARCHAR(50) NOT NULL,
     late_fee        FLOAT
@@ -15,7 +15,7 @@ CREATE TABLE Library_Branch (
 
 DROP TABLE IF EXISTS Borrower;
 CREATE TABLE Borrower (
-    card_no         VARCHAR(6) PRIMARY KEY,
+    card_no         INTEGER PRIMARY KEY AUTOINCREMENT,
     name            VARCHAR(25) NOT NULL,
     address         VARCHAR(50) NOT NULL,
     phone           VARCHAR(15) NOT NULL
@@ -23,7 +23,7 @@ CREATE TABLE Borrower (
 
 DROP TABLE IF EXISTS Book;
 CREATE TABLE Book (
-    book_id         INT PRIMARY KEY,
+    book_id         INTEGER PRIMARY KEY AUTOINCREMENT,
     title           VARCHAR(50) NOT NULL,
     book_publisher  VARCHAR(25),
     FOREIGN KEY(book_publisher) REFERENCES Publisher(publisher_name)
@@ -65,52 +65,53 @@ CREATE TABLE Book_Authors (
 -- #1
 -- UPDATE Book_Loans
 -- SET late=1
--- WHERE (returned_date > due_date) OR CURRENT_DATE > due_date;
+-- WHERE (returned_date > due_date);
 
 -- UPDATE Book_Loans
 -- SET late=0
 -- WHERE returned_date <= due_date;
 
 -- #2
--- UPDATE Library_Branch SET late_fee=2.00 WHERE branch_name='Main Branch';
--- UPDATE Library_Branch SET late_fee=2.50 WHERE branch_name='West Branch';
--- UPDATE Library_Branch SET late_fee=3.00 WHERE branch_name='East Branch';
+-- UPDATE Library_Branch SET late_fee=1.00 WHERE branch_name='Main Branch';
+-- UPDATE Library_Branch SET late_fee=1.50 WHERE branch_name='West Branch';
+-- UPDATE Library_Branch SET late_fee=2.00 WHERE branch_name='East Branch';
 
 -- #3
-CREATE VIEW vBookLoanInfo AS
-SELECT 
-    BL.card_no, 
-    BR.name, 
-    BL.date_out, 
-    BL.due_date, 
-    BL.returned_date,
-    (julianday(COALESCE(BL.returned_date, CURRENT_DATE)) - julianday(BL.date_out)) AS TotalDays,
-    B.title,
-    CASE
-        WHEN BL.returned_date <= BL.due_date THEN 0
-        WHEN BL.returned_date IS NULL THEN julianday(CURRENT_DATE) - julianday(BL.due_date)
-        ELSE julianday(BL.returned_date) - julianday(BL.due_date)
-    END AS days_late,
-    BL.branch_id,
-    CASE
-        WHEN BL.late=1 THEN LB.late_fee
-        ELSE 0.00
-    END AS late_fee_balance
-FROM Book_Loans BL
-JOIN Borrower BR ON BL.card_no=BR.card_no
-JOIN Book B ON B.book_id=BL.book_id
-JOIN Library_Branch LB on LB.branch_id=BL.branch_id;
+-- CREATE VIEW vBookLoanInfo AS
+-- SELECT 
+--     BL.card_no, 
+--     BR.name, 
+--     BL.date_out, 
+--     BL.due_date, 
+--     BL.returned_date,
+--     (julianday(COALESCE(BL.returned_date, CURRENT_DATE)) - julianday(BL.date_out)) AS TotalDays,
+--     B.title,
+--     CASE
+--         WHEN BL.returned_date <= BL.due_date THEN 0
+--         WHEN BL.returned_date IS NULL THEN julianday(CURRENT_DATE) - julianday(BL.due_date)
+--         ELSE julianday(BL.returned_date) - julianday(BL.due_date)
+--     END AS days_late,
+--     BL.branch_id,
+--     CASE
+--         WHEN BL.late=1 AND BL.returned_date IS NULL THEN LB.late_fee * (julianday(CURRENT_DATE) - julianday(BL.due_date)) 
+--         WHEN BL.late=1 AND BL.returned_date IS NOT NULL THEN LB.late_fee * (julianday(BL.returned_date) - julianday(BL.due_date))
+--         ELSE 0.00
+--     END AS late_fee_balance
+-- FROM Book_Loans BL
+-- JOIN Borrower BR ON BL.card_no=BR.card_no
+-- JOIN Book B ON B.book_id=BL.book_id
+-- JOIN Library_Branch LB on LB.branch_id=BL.branch_id;
 
-CREATE TRIGGER reduce_copies_trigger
-AFTER INSERT ON Book_Loans
-FOR EACH ROW
-BEGIN
-    UPDATE Book_Copies
-    SET no_of_copies = no_of_copies - 1
-    WHERE book_id=NEW.book_id AND branch_id=NEW.branch_id;
-END;
+-- CREATE TRIGGER reduce_copies_trigger
+-- AFTER INSERT ON Book_Loans
+-- FOR EACH ROW
+-- BEGIN
+--     UPDATE Book_Copies
+--     SET no_of_copies = no_of_copies - 1
+--     WHERE book_id=NEW.book_id AND branch_id=NEW.branch_id;
+-- END;
 
-CREATE VIEW User_View AS
-SELECT B.book_id, BC.branch_id, B.book_publisher, B.title, BC.no_of_copies
-FROM Book B
-JOIN Book_Copies BC ON B.book_id=BC.book_id;
+-- CREATE VIEW User_View AS
+-- SELECT B.book_id, BC.branch_id, B.book_publisher, B.title, BC.no_of_copies
+-- FROM Book B
+-- JOIN Book_Copies BC ON B.book_id=BC.book_id;
