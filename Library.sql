@@ -77,30 +77,30 @@ CREATE TABLE Book_Authors (
 -- UPDATE Library_Branch SET late_fee=2.00 WHERE branch_name='East Branch';
 
 -- #3
--- CREATE VIEW vBookLoanInfo AS
--- SELECT 
---     BL.card_no, 
---     BR.name, 
---     BL.date_out, 
---     BL.due_date, 
---     BL.returned_date,
---     (julianday(COALESCE(BL.returned_date, CURRENT_DATE)) - julianday(BL.date_out)) AS TotalDays,
---     B.title,
---     CASE
---         WHEN BL.returned_date <= BL.due_date THEN 0
---         WHEN BL.returned_date IS NULL THEN julianday(CURRENT_DATE) - julianday(BL.due_date)
---         ELSE julianday(BL.returned_date) - julianday(BL.due_date)
---     END AS days_late,
---     BL.branch_id,
---     CASE
---         WHEN BL.late=1 AND BL.returned_date IS NULL THEN LB.late_fee * (julianday(CURRENT_DATE) - julianday(BL.due_date)) 
---         WHEN BL.late=1 AND BL.returned_date IS NOT NULL THEN LB.late_fee * (julianday(BL.returned_date) - julianday(BL.due_date))
---         ELSE 0.00
---     END AS late_fee_balance
--- FROM Book_Loans BL
--- JOIN Borrower BR ON BL.card_no=BR.card_no
--- JOIN Book B ON B.book_id=BL.book_id
--- JOIN Library_Branch LB on LB.branch_id=BL.branch_id;
+CREATE VIEW vBookLoanInfo AS
+SELECT 
+    BL.card_no, 
+    BR.name, 
+    BL.date_out, 
+    BL.due_date, 
+    BL.returned_date,
+    (julianday(COALESCE(BL.returned_date, CURRENT_DATE)) - julianday(BL.date_out)) AS TotalDays,
+    B.title,
+    CASE
+        WHEN BL.returned_date <= BL.due_date THEN 0
+        WHEN BL.returned_date IS NULL THEN julianday(CURRENT_DATE) - julianday(BL.due_date)
+        ELSE julianday(BL.returned_date) - julianday(BL.due_date)
+    END AS days_late,
+    BL.branch_id,
+    CASE
+        WHEN BL.late=1 AND BL.returned_date IS NULL THEN LB.late_fee * (julianday(CURRENT_DATE) - julianday(BL.due_date)) 
+        WHEN BL.late=1 AND BL.returned_date IS NOT NULL THEN LB.late_fee * (julianday(BL.returned_date) - julianday(BL.due_date))
+        ELSE 0.00
+    END AS late_fee_balance
+FROM Book_Loans BL
+JOIN Borrower BR ON BL.card_no=BR.card_no
+JOIN Book B ON B.book_id=BL.book_id
+JOIN Library_Branch LB on LB.branch_id=BL.branch_id;
 
 
 -- CREATE TRIGGER reduce_copies_trigger

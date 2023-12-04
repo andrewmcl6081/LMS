@@ -223,7 +223,33 @@ def find_book():
 
 @app.route('/find_loan', methods=['GET', 'POST'])
 def find_loan():
-    return render_template('lookUpLoan.html')
+    start_date = request.form.get("loan-start")
+    end_date = request.form.get("loan-end")
+    
+    if start_date and end_date:
+        try:
+            sqliteConnection = sqlite3.connect('LMS.db')
+            cursor = sqliteConnection.cursor()
+            
+            select_query = """
+                    SELECT BL.book_id, B.title, BL.card_no, CAST(julianday(COALESCE(BL.returned_date, CURRENT_DATE)) - julianday(BL.due_date) AS INTEGER) AS days_late  
+                    FROM Book B
+                    JOIN Book_Loans BL ON B.book_id=BL.book_id
+                    WHERE BL.late='1' AND (BL.due_date BETWEEN ? AND ?);
+                    """
+            
+            cursor.execute(select_query, (start_date, end_date))
+            loans = cursor.fetchall()
+            
+            cursor.close()
+            sqliteConnection.close()
+            
+            return render_template('lookUpLoan.html', start_date=start_date, end_date=end_date, loans=loans)
+        except Exception as e:
+            print('Error: ', e)
+            
+
+    return render_template('lookUpLoan.html', start_date=start_date, end_date=end_date)
 
 if __name__ == '__main__':
     app.run(debug=True, port=3000)

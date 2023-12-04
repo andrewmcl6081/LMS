@@ -7,5 +7,36 @@
 </head>
 <body>
     <h2>Find a Loan</h2>
+
+    <form action="{{ url_for('find_loan') }}" method="post">
+        <label>Start date: </label><input type="date" id="start" name="loan-start" /><br>
+        <label>End date: </label><input type="date" id="end" name="loan-end"/><br>
+        <button type="submit">Find loans</button>
+    </form>
+
+    {% if loans %}
+        <h2>Book loans between {{ start_date }} and {{ end_date }} </h2>
+
+        <table>
+            <tr>
+                <th style="padding-right: 10px;">Book ID</th>
+                <th style="padding-right: 10px;">Book Title</th>
+                <th style="padding-right: 10px;">Card No.</th>
+                <th style="padding-right: 10px;">Days Late</th>
+            </tr>
+
+            {% for loan in loans %}
+                <tr>
+                    <td style="padding-right: 10px;">{{ loan[0] }}</td>
+                    <td style="padding-right: 10px;">{{ loan[1] }}</td>
+                    <td style="padding-right: 10px;">{{ loan[2] }}</td>
+                    <td style="padding-right: 10px;">{{ loan[3] }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+    <br>
+    <a href="{{ url_for('home') }}"><button>Return Home</button></a>
 </body>
 </html>
