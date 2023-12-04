@@ -6,6 +6,31 @@
     <title>LMS</title>
 </head>
 <body>
-    
+    <h2>Add a new book</h2>
+
+    <form method="post" action="{{ url_for('new_book') }}">
+        <input type="text" name="booktitle" id="booktitle" placeholder="Book Title">
+        <input type="text" name="author" id="author" placeholder="Author">
+        <input type="text" name="publisher" id="publisher" placeholder="Publisher">
+
+        <table>
+            <tr>
+                <th>Branch ID</th>
+                <th>Branch Name</th>
+                <th>Number of Copies</th>
+            </tr>
+            {% for branch in branches %}
+            <input type="hidden" name="branch_ids" value="{{ branch[0] }}">
+            <tr>
+                <td> {{ branch[0]}} </td>
+                <td> {{ branch[1]}} </td>
+                <td> <input type="text" name="noCopies_{{ branch[0] }}" id="noCopies_ {{ branch[0] }}"> </td>
+                <td> <input type="checkbox" name="branchCheck_{{ branch[0] }}" id="branchCheck_{{ branch[0] }}" value="yes" /> </td>
+            </tr>
+            {% endfor %}    
+        </table>
+        
+        <button type="submit" id="addBookBtn">Add Book</button>
+    </form>
 </body>
 </html>

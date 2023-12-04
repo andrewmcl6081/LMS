@@ -100,7 +100,98 @@ def new_borrower():
     
 @app.route('/book', methods=['GET'])
 def book():
-    return render_template('book.html')
+    try:
+        sqliteConnection = sqlite3.connect('LMS.db')
+        cursor = sqliteConnection.cursor()
+        print("Database successfully connected: BOOK")
+        
+        # Select Query
+        select_query = """
+                SELECT branch_id, branch_name
+                FROM Library_Branch;
+                """
+        cursor.execute(select_query)
+        data = cursor.fetchall()
+
+        cursor.close()
+        sqliteConnection.close()
+    except Exception as e:
+        print("Error: ", e)
+
+    return render_template('book.html', branches=data)
+
+@app.route('/new_book', methods=['POST'])
+def new_book():
+    print('in new book route')
+    branch_ids = request.form.getlist('branch_ids')  # This will be a list of branch IDs
+
+    book_title = request.form.get('booktitle')
+    author = request.form.get('author')
+    publisher = request.form.get('publisher')
+
+    # Add to Book and required tables table
+    try:
+        sqliteConnection = sqlite3.connect('LMS.db')
+        cursor = sqliteConnection.cursor()
+        print("Database successfully connected: NEW BOOK")
+        
+        # Insert into Book table query
+        insert_book_query = """
+                INSERT INTO Book(title, book_publisher)
+                VALUES(?, ?);
+                """
+
+        cursor.execute(insert_book_query, (book_title, publisher))
+        sqliteConnection.commit()
+
+        # Select new book id query
+        select_id_query = """
+                SELECT book_id
+                FROM Book
+                WHERE title = ? AND book_publisher = ?;
+                """
+        
+        cursor.execute(select_id_query, (book_title, publisher))
+        new_book_id = cursor.fetchall()[0][0]
+    
+        # Insert into Author table query
+        insert_author_query = """
+                INSERT INTO Book_Authors(book_id, author_name)
+                VALUES(?, ?);
+                """
+
+        cursor.execute(insert_author_query, (new_book_id, author))
+        sqliteConnection.commit()
+
+        for branch_id in branch_ids:
+            checkbox_name = f"branchCheck_{branch_id}"
+            copies_name = f"noCopies_{branch_id}"
+
+            # Check if the checkbox was checked
+            checkbox_checked = checkbox_name in request.form
+
+            if checkbox_checked:
+                # Get the value of the text input
+                no_copies = request.form.get(copies_name)
+
+                # Insert into Copies table query
+                insert_copies_query = """
+                    INSERT INTO Book_Copies(book_id, branch_id, no_of_copies)
+                    VALUES(?, ?, ?);
+                    """
+                
+                cursor.execute(insert_copies_query, (new_book_id, branch_id, no_copies))
+                sqliteConnection.commit()
+
+            # Now you have the checkbox state and the number of copies for this branch ID
+            print(f"Branch ID: {branch_id}, Checked: {checkbox_checked}, No. of Copies: {no_copies}")
+
+        cursor.close() 
+        sqliteConnection.close()
+    except Exception as e:
+        print("Error: ", e)
+
+    return redirect(url_for('home'))
 
 @app.route('/find_book', methods=['GET', 'POST'])
 def find_book():
