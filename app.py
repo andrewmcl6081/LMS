@@ -288,5 +288,55 @@ def latefees():
                 print('Error: ', e)
     return render_template('latefees.html')
 
+@app.route('/late_fees_2', methods=['GET', 'POST'])
+def late_fees_2():
+    card_no = request.form.get('cardNo')
+    book_id = request.form.get('bookID')
+    book_title = request.form.get('bookTitle')
+    
+    try:
+        sqliteConnection = sqlite3.connect('LMS.db')
+        cursor = sqliteConnection.cursor()
+        
+        if card_no and book_id and book_title:
+            select_query = """
+                    SELECT V.card_no, V.title, V.late_fee_balance
+                    FROM vBookLoanInfo V
+                    JOIN Book_Loans BL ON V.card_no=BL.card_no 
+                    WHERE BL.book_id=? AND V.card_no=? AND V.title LIKE ?;"""
+            
+            cursor.execute(select_query, (book_id, card_no, '%' + book_title + '%',))
+        elif card_no and book_id:
+            select_query = """
+                    SELECT V.card_no, V.title, V.late_fee_balance
+                    FROM vBookLoanInfo V
+                    JOIN Book_Loans BL ON V.card_no=BL.card_no
+                    WHERE BL.book_id=? AND V.card_no=?"""
+            
+            cursor.execute(select_query, (book_id, card_no,))
+        elif card_no and book_title:
+            select_query = """
+                    SELECT V.card_no, V.title, V.late_fee_balance
+                    FROM VBookLoanInfo V
+                    WHERE V.card_no=? AND V.title LIKE ?"""
+            
+            cursor.execute(select_query, (card_no, '%' + book_title + '%',))
+        else:
+            select_query = """
+                    SELECT card_no, title, late_fee_balance
+                    FROM vBookLoanInfo
+                    ORDER BY late_fee_balance DESC"""
+            
+            cursor.execute(select_query)
+        
+        data = cursor.fetchall()
+        
+        cursor.close()
+        sqliteConnection.close()
+        
+        return render_template('latefees.html', fees_2=data)
+    except Exception as e:
+        print('Error: ', e)
+
 if __name__ == '__main__':
     app.run(debug=True, port=3000)

@@ -6,32 +6,68 @@
     <title>LMS</title>
 </head>
 <body>
-    <h2>Search for late fees</h2>
-    <form method="post" action="{{ url_for('latefees') }}">
-        <label for="cardnoFees">Card Number: </label><input type="text" name="cardnoFees" id="cardnoFees">
-        <label for="borrowerName">Borrower Name: </label><input type="text" name="borrowerName" id="borrowerName">
-        <button type="submit" id="searchFeesBtn">Search</button>
-    </form>
-    
-    <br>
+    <h1>Search for late fees</h1>
 
-    {% if fees %}
-        <table>
-            <tr>
-                <th>Card Number</th>
-                <th>Name</th>
-                <th>Late Fee Balance</th>
-            </tr>
-            {% for fee in fees %}
-            <tr>
-                <td>{{ fee[0] }}</td>
-                <td>{{ fee[1] }}</td>
-                <td>${{ fee[2] }}0</td>
-            </tr>
-            {% endfor %}
-        </table>
-    {% endif %}
+    <div style="display: flex; justify-content: space-around;">
+        <div>
+            <h2>Borrower Info</h2>
+            <form method="post" action="{{ url_for('latefees') }}">
+                <label for="cardnoFees">Card Number: </label><input type="text" name="cardnoFees" id="cardnoFees">
+                <label for="borrowerName">Borrower Name: </label><input type="text" name="borrowerName" id="borrowerName">
+                <button type="submit" id="searchFeesBtn">Search</button>
+            </form>
+            
+            <br>
         
-    
+            {% if fees %}
+                <table>
+                    <tr>
+                        <th>Card Number</th>
+                        <th>Name</th>
+                        <th>Late Fee Balance</th>
+                    </tr>
+
+                    {% for fee in fees %}
+                        <tr>
+                            <td>{{ fee[0] }}</td>
+                            <td>{{ fee[1] }}</td>
+                            <td>${{ fee[2] }}0</td>
+                        </tr>
+                    {% endfor %}
+
+                </table>
+            {% endif %}
+        </div>
+
+        <div>
+            <h2>Book Info</h2>
+
+            <form method="post" action="{{ url_for('late_fees_2') }}">
+                <label for="cardNo">Card No.: </label><input type="text" name="cardNo" id="cardNo">
+                <label for="bookID">Book ID: </label><input type="text" name="bookID" id="bookID">
+                <label for="bookTitle">Book Title: </label><input type="text" name="bookTitle" id="bookTitle">
+                <button type="submit" id="searchFees2Btn">Search</button>
+            </form>
+
+            {% if fees_2 %}
+                <table>
+                    <tr>
+                        <th>Card Number</th>
+                        <th>Title</th>
+                        <th>Late Fee Balance</th>
+                    </tr>
+
+                    {% for fee in fees_2 %}
+                        <tr>
+                            <td>{{ fee[0] }}</td>
+                            <td>{{ fee[1] }}</td>
+                            <td>${{ fee[2] }}0</td>
+                        </tr>
+                    {% endfor %}
+
+                </table>
+            {% endif %}
+        </div>
+    </div>
 </body>
 </html>
