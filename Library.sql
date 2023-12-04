@@ -117,3 +117,9 @@ CREATE TABLE Book_Authors (
 -- SELECT B.book_id, BC.branch_id, B.book_publisher, B.title, BC.no_of_copies
 -- FROM Book B
 -- JOIN Book_Copies BC ON B.book_id=BC.book_id;
+
+
+-- SELECT B.title, BC.branch_id, BC.no_of_copies
+-- FROM Book B
+-- JOIN Book_Copies BC ON B.book_id=BC.book_id
+-- WHERE B.title='A Tale of Two Cities';

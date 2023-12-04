@@ -35,9 +35,9 @@
    
     <br>
     <a href="{{ url_for('borrower') }}"><button>Not a member?</button></a>
-
-    <br>
     <a href="{{ url_for('book') }}"><button>Add a book</button></a>
+    <a href={{ url_for('find_book') }}><button>Find a book</button></a>
+
     <!-- JS alert if card_no is empty entered when checking out -->
     <script>
         document.getElementById('checkoutBtn').addEventListener('click', function() {

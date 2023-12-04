@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LMS</title>
+</head>
+<body>
+    <h2>Find a Book</h2>
+
+    <form method="post" action="{{ url_for('find_book') }}">
+        <label for='booktitle'>Book Title: </label><input type="text" id="booktitle" name="booktitle">
+        <button type="submit" id="searchBtn">Search</button>
+    </form>
+
+    {% if data_search_result %}
+        <br>
+        <table>
+            <thead>
+                <tr>
+                    <th style="padding: 10px;">Title</th>
+                    <th style="padding: 10px;">Branch ID</th>
+                    <th style="padding: 10px;">No. of copies</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in data_search_result %}
+                    <tr>
+                        <td style="padding: 10px;">{{ row[0] }}</td>
+                        <td style="padding: 10px;">{{ row[1] }}</td>
+                        <td style="padding: 10px;">{{ row[2] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    <br>
+    <a href="{{ url_for('home') }}"><button>Return Home</button></a>
+</body>
+</html>

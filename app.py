@@ -102,5 +102,33 @@ def new_borrower():
 def book():
     return render_template('book.html')
 
+@app.route('/find_book', methods=['GET', 'POST'])
+def find_book():
+    booktitle = request.form.get("booktitle")
+    
+    if booktitle:
+        try:
+            sqliteConnection = sqlite3.connect('LMS.db')
+            cursor = sqliteConnection.cursor()
+            
+            select_query = """
+                    SELECT B.title, BC.branch_id, BC.no_of_copies
+                    FROM Book B
+                    JOIN Book_Copies BC ON B.book_id=BC.book_id
+                    WHERE B.title=?;
+                    """
+            
+            cursor.execute(select_query, (booktitle,))
+            data = cursor.fetchall()
+            
+            cursor.close()
+            sqliteConnection.close()
+            
+            return render_template('findBook.html', data_search_result=data)
+        except Exception as e:
+            print('Error: ', e)
+    
+    return render_template('findBook.html')
+
 if __name__ == '__main__':
     app.run(debug=True, port=3000)
