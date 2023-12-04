@@ -130,5 +130,9 @@ def find_book():
     
     return render_template('findBook.html')
 
+@app.route('/find_loan', methods=['GET', 'POST'])
+def find_loan():
+    return render_template('lookUpLoan.html')
+
 if __name__ == '__main__':
     app.run(debug=True, port=3000)
