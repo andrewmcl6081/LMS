@@ -22,7 +22,7 @@ def home():
     except Exception as e:
         print("Error: ", e)
 
-    return render_template('books.html', books=data)
+    return render_template('index.html', books=data)
 
 @app.route('/checkout', methods=['POST'])
 def checkout():
@@ -98,6 +98,9 @@ def new_borrower():
         
     return redirect(url_for('borrower'))
     
+@app.route('/book', methods=['GET'])
+def book():
+    return render_template('book.html')
 
 if __name__ == '__main__':
     app.run(debug=True, port=3000)
