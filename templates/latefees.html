@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LMS</title>
+</head>
+<body>
+    <h2>Search for late fees</h2>
+    <form method="post" action="{{ url_for('latefees') }}">
+        <label for="cardnoFees">Card Number: </label><input type="text" name="cardnoFees" id="cardnoFees">
+        <label for="borrowerName">Borrower Name: </label><input type="text" name="borrowerName" id="borrowerName">
+        <button type="submit" id="searchFeesBtn">Search</button>
+    </form>
+    
+    <br>
+
+    {% if fees %}
+        <table>
+            <tr>
+                <th>Card Number</th>
+                <th>Name</th>
+                <th>Late Fee Balance</th>
+            </tr>
+            {% for fee in fees %}
+            <tr>
+                <td>{{ fee[0] }}</td>
+                <td>{{ fee[1] }}</td>
+                <td>${{ fee[2] }}0</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+        
+    
+</body>
+</html>

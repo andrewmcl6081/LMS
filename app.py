@@ -251,5 +251,42 @@ def find_loan():
 
     return render_template('lookUpLoan.html', start_date=start_date, end_date=end_date)
 
+@app.route('/latefees', methods=['GET', 'POST'])
+def latefees():
+    borrowerName = request.form.get('borrowerName')
+
+    if request.method == 'POST':
+        try:
+            sqliteConnection = sqlite3.connect('LMS.db')
+            cursor = sqliteConnection.cursor()
+            print("Database successfully connected: LATE FEES")
+            
+            if borrowerName:
+                select_latefees_query = """
+                    SELECT card_no, name, late_fee_balance
+                    FROM vBookLoanInfo
+                    WHERE name LIKE ?;
+                """
+                cursor.execute(select_latefees_query, ('%' + borrowerName + '%',))
+            
+            else:
+                select_latefees_query = """
+                    SELECT card_no, name, late_fee_balance
+                    FROM vBookLoanInfo
+                    ORDER BY late_fee_balance DESC;
+                """
+                cursor.execute(select_latefees_query)
+
+            data = cursor.fetchall()
+            cursor.close()
+            sqliteConnection.close()
+            
+            if data:
+                return render_template('latefees.html', fees = data)
+        
+        except Exception as e:
+                print('Error: ', e)
+    return render_template('latefees.html')
+
 if __name__ == '__main__':
     app.run(debug=True, port=3000)
