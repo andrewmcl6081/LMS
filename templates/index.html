@@ -4,43 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LMS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1>Library Management System</h1>
-    <table>
-        <tr>
-            <th>Book ID</th>
-            <th>Branch ID</th>
-            <th>Title</th>
-            <th>Publishers</th>
-            <th>Number of Copies</th>
-        </tr>
-        {% for book in books %}
-        <tr>
-            <td> {{ book[0]}} </td>
-            <td> {{ book[1]}} </td>
-            <td> {{ book[3]}} </td>
-            <td> {{ book[2]}} </td>
-            <td> {{ book[4]}} </td>
-        </tr>
-        {% endfor %}
-    </table>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">Library Management System</span>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav">
+                        <a class="nav-link" href="{{ url_for('borrower') }}">Sign Up</a>
+                        <a class="nav-link" href="{{ url_for('book') }} ">Add Book</a>
+                        <a class="nav-link" href="{{ url_for('find_book') }}"">Find Book</a>
+                        <a class="nav-link" href="{{ url_for('find_loan') }}"">Loans</a>
+                        <a class="nav-link" href="{{ url_for('latefees') }}"">Late Fees</a>
+                </div>
+            </div>
+        </div>
+    </nav>
 
-    <form method="post" action="{{ url_for('checkout') }}">
-        <input type="text" name="cardno" id="cardno" placeholder="Card Number">
-        <input type="text" name="bookid" id="bookid" placeholder="Book ID">
-        <input type="text" name="branchid" id="branchid" placeholder="Branch ID">
+    <div style="display: flex; justify-content: center;">
+        <div>
+            <table class="table table-sm table-striped table-hover table-bordered">
+                <tr>
+                    <th>Book ID</th>
+                    <th>Branch ID</th>
+                    <th>Title</th>
+                    <th>Publishers</th>
+                    <th>Number of Copies</th>
+                </tr>
+                <tbody class="table-group-divider">
+                {% for book in books %}
+                <tr>
+                    <td> {{ book[0]}} </td>
+                    <td> {{ book[1]}} </td>
+                    <td> {{ book[3]}} </td>
+                    <td> {{ book[2]}} </td>
+                    <td> {{ book[4]}} </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
 
-        <button type="submit" id="checkoutBtn">Checkout</button>
-    </form> 
-   
-    <br>
-    <a href="{{ url_for('borrower') }}"><button>Not a member?</button></a>
-    <a href="{{ url_for('book') }} "><button>Add a book</button></a>
-    <a href="{{ url_for('find_book') }}""><button>Find a book</button></a>
-    <a href="{{ url_for('find_loan') }}""><button>Look up a loan</button></a>
-    <a href="{{ url_for('latefees') }}""><button>Late fees</button></a>
+        <div class="card text-center mb-3">
+            <form method="post" action="{{ url_for('checkout') }}">
+                <ul class="list-group list-group-flush">
+                    
+                    <input type="text" name="cardno" id="cardno" placeholder="Card Number">
+                    <input type="text" name="bookid" id="bookid" placeholder="Book ID">
+                    <input type="text" name="branchid" id="branchid" placeholder="Branch ID">
 
+                    <button type="submit" id="checkoutBtn">Checkout</button>
+                </ul>
+            </form> 
+        </div>
 
     <!-- JS alert if card_no is empty entered when checking out -->
     <script>
@@ -56,5 +73,6 @@
         });
     </script>
     
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
 </html>
