@@ -46,15 +46,15 @@
             </table>
         </div>
 
-        <div class="card text-center mb-3">
+        <div class="card text-center bg-white p-3" style="align-self: flex-start; margin-left: 20px;">
             <form method="post" action="{{ url_for('checkout') }}">
                 <ul class="list-group list-group-flush">
                     
-                    <input type="text" name="cardno" id="cardno" placeholder="Card Number">
-                    <input type="text" name="bookid" id="bookid" placeholder="Book ID">
-                    <input type="text" name="branchid" id="branchid" placeholder="Branch ID">
+                    <input class="mb-2 rounded" type="text" name="cardno" id="cardno" placeholder="Card Number">
+                    <input class="mb-2 rounded" type="text" name="bookid" id="bookid" placeholder="Book ID">
+                    <input class="mb-2 rounded" type="text" name="branchid" id="branchid" placeholder="Branch ID">
 
-                    <button type="submit" id="checkoutBtn">Checkout</button>
+                    <button class="btn btn-secondary" type="submit" id="checkoutBtn">Checkout</button>
                 </ul>
             </form> 
         </div>
