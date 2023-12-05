@@ -113,10 +113,10 @@ JOIN Library_Branch LB on LB.branch_id=BL.branch_id;
 -- END;
 
 
--- CREATE VIEW User_View AS
--- SELECT B.book_id, BC.branch_id, B.book_publisher, B.title, BC.no_of_copies
--- FROM Book B
--- JOIN Book_Copies BC ON B.book_id=BC.book_id;
+CREATE VIEW User_View AS
+SELECT B.book_id, BC.branch_id, B.book_publisher, B.title, BC.no_of_copies
+FROM Book B
+JOIN Book_Copies BC ON B.book_id=BC.book_id;
 
 
 -- SELECT B.title, BC.branch_id, BC.no_of_copies
