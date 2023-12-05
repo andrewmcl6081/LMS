@@ -7,6 +7,22 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">Library Management System</span>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav">
+                        <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+                        <a class="nav-link" href="{{ url_for('borrower') }}">Sign Up</a>
+                        <a class="nav-link" href="{{ url_for('book') }} ">Add Book</a>
+                        <a class="nav-link" href="{{ url_for('find_book') }}"">Find Book</a>
+                        <a class="nav-link" href="{{ url_for('find_loan') }}"">Loans</a>
+                        <a class="nav-link" href="{{ url_for('latefees') }}"">Late Fees</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
     <h2>Sign up</h2>
     
     <form method="post" action="{{ url_for('new_borrower') }}" id="signupForum">
