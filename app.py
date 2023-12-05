@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
+from book_utils import replace_zero_with_na, modify_late_fee_format
 import sqlite3
+
 
 app = Flask(__name__)
 
@@ -255,6 +257,7 @@ def find_loan():
 @app.route('/latefees', methods=['GET', 'POST'])
 def latefees():
     borrowerName = request.form.get('borrowerName')
+    card_no = request.form.get('cardnoFees')
 
     if request.method == 'POST':
         try:
@@ -263,20 +266,28 @@ def latefees():
             print("Database successfully connected: LATE FEES")
             
             if borrowerName:
-                select_latefees_query = """
+                select_query = """
                     SELECT card_no, name, late_fee_balance
                     FROM vBookLoanInfo
                     WHERE name LIKE ?;
                 """
-                cursor.execute(select_latefees_query, ('%' + borrowerName + '%',))
-            
+                cursor.execute(select_query, ('%' + borrowerName + '%',))
+                
+            elif card_no:
+                select_query = """
+                    SELECT card_no, name, late_fee_balance
+                    FROM vBookLoanInfo
+                    WHERE card_no=?;
+                """
+                cursor.execute(select_query, (card_no,))
+                
             else:
-                select_latefees_query = """
+                select_query = """
                     SELECT card_no, name, late_fee_balance
                     FROM vBookLoanInfo
                     ORDER BY late_fee_balance DESC;
                 """
-                cursor.execute(select_latefees_query)
+                cursor.execute(select_query)
 
             data = cursor.fetchall()
             cursor.close()
@@ -331,11 +342,13 @@ def late_fees_2():
             cursor.execute(select_query)
         
         data = cursor.fetchall()
+        modified_data = replace_zero_with_na(data)
+        reformatted_data = modify_late_fee_format(modified_data)
         
         cursor.close()
         sqliteConnection.close()
         
-        return render_template('latefees.html', fees_2=data)
+        return render_template('latefees.html', fees_2=reformatted_data)
     except Exception as e:
         print('Error: ', e)
 
