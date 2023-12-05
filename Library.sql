@@ -71,7 +71,7 @@ CREATE TABLE Book_Authors (
 -- SET late=0
 -- WHERE returned_date <= due_date;
 
--- #2
+-- -- #2
 -- UPDATE Library_Branch SET late_fee=1.00 WHERE branch_name='Main Branch';
 -- UPDATE Library_Branch SET late_fee=1.50 WHERE branch_name='West Branch';
 -- UPDATE Library_Branch SET late_fee=2.00 WHERE branch_name='East Branch';

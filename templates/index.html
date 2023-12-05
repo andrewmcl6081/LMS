@@ -66,10 +66,11 @@
 
             var cardNoValue = document.getElementById('cardno').value;
             var bookIdValue = document.getElementById('bookid').value;
+            var branchIdValue = document.getElementById('branchid').value
 
-            if (cardNoValue === '' && bookIdValue === '') {
-                alert("Make sure you entered all fields.");
+            if (cardNoValue === '' || bookIdValue === '' || branchIdValue === '') {
                 event.preventDefault();
+                alert("Make sure you entered all fields.");
             }
         });
     </script>

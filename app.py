@@ -30,24 +30,24 @@ def checkout():
     cardno = request.form.get('cardno')
     branchid = request.form.get('branchid')
 
-    try:
-        sqliteConnection = sqlite3.connect('LMS.db')
-        cursor = sqliteConnection.cursor()
-        print("Database successfully connected: CHECKOUT")
-        
-        query = """
-                INSERT INTO Book_Loans(book_id, branch_id, card_no, date_out, due_date)
-                VALUES(?, ?, ?, CURRENT_DATE, date('now', '+30 days'));
-                """
-        
-        cursor.execute(query, (bookid, branchid, cardno))
-        sqliteConnection.commit()
+    if bookid and cardno and branchid:
+        try:
+            sqliteConnection = sqlite3.connect('LMS.db')
+            cursor = sqliteConnection.cursor()
+            print("Database successfully connected: CHECKOUT")
+            
+            query = """
+                    INSERT INTO Book_Loans(book_id, branch_id, card_no, date_out, due_date)
+                    VALUES(?, ?, ?, CURRENT_DATE, date('now', '+30 days'));
+                    """
+            
+            cursor.execute(query, (bookid, branchid, cardno))
+            sqliteConnection.commit()
 
-        cursor.close()
-        sqliteConnection.close()
-    
-    except Exception as e:
-        print("Error: ", e)
+            cursor.close()
+            sqliteConnection.close()    
+        except Exception as e:
+            print("Error: ", e)
 
     return redirect(url_for('home'))
 
