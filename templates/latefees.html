@@ -24,11 +24,11 @@
         </div>
     </nav>
 
-    <h1>Search for late fees</h1>
+    <h2>Search for late fees</h2>
 
     <div style="display: flex; justify-content: space-around;">
         <div>
-            <h2>Borrower Info</h2>
+            <h3>Borrower Info</h3>
             <form method="post" action="{{ url_for('latefees') }}">
                 <label for="cardnoFees">Card Number: </label><input type="text" name="cardnoFees" id="cardnoFees">
                 <label for="borrowerName">Borrower Name: </label><input type="text" name="borrowerName" id="borrowerName">
@@ -38,13 +38,13 @@
             <br>
         
             {% if fees %}
-                <table>
+                <table class="table table-sm table-striped table-hover table-bordered">
                     <tr>
                         <th>Card Number</th>
                         <th>Name</th>
                         <th>Late Fee Balance</th>
                     </tr>
-
+                    <tbody class="table-group-divider"></tbody>
                     {% for fee in fees %}
                         <tr>
                             <td>{{ fee[0] }}</td>
@@ -58,23 +58,23 @@
         </div>
 
         <div>
-            <h2>Book Info</h2>
+            <h3>Book Info</h3>
 
             <form method="post" action="{{ url_for('late_fees_2') }}">
-                <label for="cardNo">Card No.: </label><input type="text" name="cardNo" id="cardNo">
+                <label for="cardNo">Card Number: </label><input type="text" name="cardNo" id="cardNo">
                 <label for="bookID">Book ID: </label><input type="text" name="bookID" id="bookID">
                 <label for="bookTitle">Book Title: </label><input type="text" name="bookTitle" id="bookTitle">
                 <button type="submit" id="searchFees2Btn">Search</button>
             </form>
 
             {% if fees_2 %}
-                <table>
+                <table class="table table-sm table-striped table-hover table-bordered">
                     <tr>
                         <th>Card Number</th>
                         <th>Title</th>
                         <th>Late Fee Balance</th>
                     </tr>
-
+                    <tbody class="table-group-divider"></tbody>
                     {% for fee in fees_2 %}
                         <tr>
                             <td>{{ fee[0] }}</td>

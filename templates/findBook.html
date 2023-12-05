@@ -33,7 +33,7 @@
 
     {% if data_search_result %}
         <br>
-        <table>
+        <table class="table table-sm table-striped table-hover table-bordered">
             <thead>
                 <tr>
                     <th style="padding-right: 10px;">Title</th>
@@ -41,7 +41,7 @@
                     <th style="padding-right: 10px;">No. of copies</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="table-group-divider">
                 {% for row in data_search_result %}
                     <tr>
                         <td style="padding-right: 10px;">{{ row[0] }}</td>

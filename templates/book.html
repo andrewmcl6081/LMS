@@ -31,12 +31,13 @@
         <input type="text" name="author" id="author" placeholder="Author">
         <input type="text" name="publisher" id="publisher" placeholder="Publisher">
 
-        <table>
+        <table class="table table-sm table-striped table-hover table-bordered">
             <tr>
                 <th>Branch ID</th>
                 <th>Branch Name</th>
                 <th>Number of Copies</th>
             </tr>
+            <tbody class="table-group-divider">
             {% for branch in branches %}
             <input type="hidden" name="branch_ids" value="{{ branch[0] }}">
             <tr>

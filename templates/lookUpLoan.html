@@ -35,14 +35,14 @@
     {% if loans %}
         <h2>Book loans between {{ start_date }} and {{ end_date }} </h2>
 
-        <table>
+        <table class="table table-sm table-striped table-hover table-bordered">
             <tr>
                 <th style="padding-right: 10px;">Book ID</th>
                 <th style="padding-right: 10px;">Book Title</th>
                 <th style="padding-right: 10px;">Card No.</th>
                 <th style="padding-right: 10px;">Days Late</th>
             </tr>
-
+            <tbody class="table-group-divider">
             {% for loan in loans %}
                 <tr>
                     <td style="padding-right: 10px;">{{ loan[0] }}</td>
