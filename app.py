@@ -205,16 +205,23 @@ def find_book():
             sqliteConnection = sqlite3.connect('LMS.db')
             cursor = sqliteConnection.cursor()
             
+            # select_query = """
+            #         SELECT B.title, BC.branch_id, BC.no_of_copies
+            #         FROM Book B
+            #         JOIN Book_Copies BC ON B.book_id=BC.book_id
+            #         WHERE B.title=?;
+            #         """
+                    
             select_query = """
-                    SELECT B.title, BC.branch_id, BC.no_of_copies
-                    FROM Book B
-                    JOIN Book_Copies BC ON B.book_id=BC.book_id
-                    WHERE B.title=?;
-                    """
+                    SELECT B.title, BL.branch_id, COUNT(BL.book_id) AS book_copies
+                    FROM Book_Loans BL
+                    JOIN Book B ON B.book_id=BL.book_id
+                    WHERE B.title=?
+                    GROUP BY BL.branch_id"""
             
             cursor.execute(select_query, (booktitle,))
             data = cursor.fetchall()
-            
+            print(data)
             cursor.close()
             sqliteConnection.close()
             
