@@ -75,6 +75,8 @@ CREATE TABLE Book_Authors (
 -- UPDATE Library_Branch SET late_fee=1.00 WHERE branch_name='Main Branch';
 -- UPDATE Library_Branch SET late_fee=1.50 WHERE branch_name='West Branch';
 -- UPDATE Library_Branch SET late_fee=2.00 WHERE branch_name='East Branch';
+-- UPDATE Library_Branch SET late_fee=2.50 WHERE branch_name='North Branch';
+-- UPDATE Library_Branch SET late_fee=3.00 WHERE branch_name='UTA Branch';
 
 -- #3
 CREATE VIEW vBookLoanInfo AS
