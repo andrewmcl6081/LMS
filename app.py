@@ -344,6 +344,7 @@ def late_fees_2():
         data = cursor.fetchall()
         modified_data = replace_zero_with_na(data)
         reformatted_data = modify_late_fee_format(modified_data)
+        print(modified_data)
         
         cursor.close()
         sqliteConnection.close()
